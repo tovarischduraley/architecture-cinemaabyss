@@ -29,7 +29,7 @@ class ReverseProxyMiddleware(BaseHTTPMiddleware):
 app.add_middleware(ReverseProxyMiddleware)
 
 
-async def process_event[T](event: T) -> None:
+async def process_event[T](event: T) -> dict:
     type_topic_dict = {
         MoviesEventSchema: "movie-events",
         UsersEventSchema: "user-events",
