@@ -72,15 +72,15 @@ async def process_event[T](event: T) -> dict:
 
 #
 @app.post("/api/events/movie")
-async def create_movie_event(event: MoviesEventSchema) -> None:
+async def create_movie_event(event: MoviesEventSchema) -> dict:
     return await process_event(event=event)
 
 
 @app.post("/api/events/user")
-async def create_user_event(event: UsersEventSchema) -> None:
+async def create_user_event(event: UsersEventSchema) -> dict:
     return await process_event(event=event)
 
 
 @app.post("/api/events/payment")
-async def create_payment_event(event: PaymentsEventSchema) -> None:
+async def create_payment_event(event: PaymentsEventSchema) -> dict:
     return await process_event(event=event)
