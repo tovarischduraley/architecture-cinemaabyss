@@ -94,8 +94,12 @@ services:
     ports:
       - "8082:8082"
     environment:
-      PORT: 8082
-      KAFKA_BROKERS: kafka:9092
+      KAFKA_HOST: kafka:9092
+    tty: true
+    volumes:
+      - ./src/microservices/events/main.py:/app/main.py
+      - ./src/microservices/events/config.py:/app/config.py
+      - ./src/microservices/events/schemas.py:/app/schemas.py
     networks:
       - cinemaabyss-network
 
@@ -108,7 +112,7 @@ services:
     depends_on:
       - monolith
       - movies-service
-      - events-service
+#      - events-service
     ports:
       - "8000:8000"
     environment:
@@ -118,6 +122,9 @@ services:
       EVENTS_SERVICE_URL: http://events-service:8082
       GRADUAL_MIGRATION: "true"
       MOVIES_MIGRATION_PERCENT: "50"
+    volumes:
+      - ./src/microservices/proxy/main.py:/app/main.py
+    tty: true
     networks:
       - cinemaabyss-network
 
