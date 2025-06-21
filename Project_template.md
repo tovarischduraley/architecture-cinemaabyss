@@ -14,6 +14,8 @@
 
 ![movie topic](/diagrams/movie-topic.png)
 ![movie swagger](/diagrams/movie-swagger.png)
+![All tests ok](diagrams/alltestsok.png)
+
 # Задание 3
 
 Команда начала переезд в Kubernetes для лучшего масштабирования и повышения надежности. 
