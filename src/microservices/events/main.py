@@ -70,7 +70,6 @@ async def process_event[T](event: T) -> dict:
     }
 
 
-#
 @app.post("/api/events/movie", status_code=status.HTTP_201_CREATED)
 async def create_movie_event(event: MoviesEventSchema) -> dict:
     return await process_event(event=event)
