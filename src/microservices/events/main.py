@@ -5,7 +5,7 @@ import logging
 import uuid
 
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer, ConsumerRecord
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -71,16 +71,21 @@ async def process_event[T](event: T) -> dict:
 
 
 #
-@app.post("/api/events/movie")
+@app.post("/api/events/movie", status_code=status.HTTP_201_CREATED)
 async def create_movie_event(event: MoviesEventSchema) -> dict:
     return await process_event(event=event)
 
 
-@app.post("/api/events/user")
+@app.post("/api/events/user", status_code=status.HTTP_201_CREATED)
 async def create_user_event(event: UsersEventSchema) -> dict:
     return await process_event(event=event)
 
 
-@app.post("/api/events/payment")
+@app.post("/api/events/payment", status_code=status.HTTP_201_CREATED)
 async def create_payment_event(event: PaymentsEventSchema) -> dict:
     return await process_event(event=event)
+
+
+@app.get("/api/events/health", status_code=status.HTTP_200_OK)
+async def create_payment_event() -> dict:
+    return {"status": True}

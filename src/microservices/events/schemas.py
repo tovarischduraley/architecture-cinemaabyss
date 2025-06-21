@@ -4,27 +4,27 @@ from pydantic import BaseModel
 
 
 class MoviesEventSchema(BaseModel):
-    movie_id: int
-    title: str
-    action: str
-    user_id: int
-    rating: float
-    genres: list
-    description: str
+    movie_id: int | None = None
+    title: str | None = None
+    action: str | None = None
+    user_id: int | None = None
+    rating: float | None = None
+    genres: list | None = None
+    description: str | None = None
 
 
 class UsersEventSchema(BaseModel):
-    username: str
-    user_id: int
-    email: str
-    timestamp: datetime.datetime
-    action: str
+    username: str | None = None
+    user_id: int | None = None
+    email: str | None = None
+    timestamp: datetime.datetime | None = None
+    action: str | None = None
 
 
 class PaymentsEventSchema(BaseModel):
-    payment_id: int
-    user_id: int
-    status: str
-    amount: float
-    timestamp: datetime.datetime
-    method_type: str
+    payment_id: int | None = None
+    user_id: int | None = None
+    status: str | None = None
+    amount: float | None = None
+    timestamp: datetime.datetime | None = None
+    method_type: str | None = None
