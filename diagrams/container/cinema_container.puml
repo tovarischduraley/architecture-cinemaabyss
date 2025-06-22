@@ -1,0 +1,57 @@
+@startuml
+!include C4_Container.puml
+
+title Container Diagram for Кинобездна
+
+AddElementTag("microService", $shape=EightSidedShape(), $bgColor="CornflowerBlue", $fontColor="white", $legendText="micro service\neight sided")
+AddElementTag("storage", $shape=RoundedBoxShape(), $bgColor="lightSkyBlue", $fontColor="white")
+
+ContainerQueue(rabbit, "RabbitMQ", "Очередь для общения с системой рекомендаций")
+
+System_Boundary(cinobezdna, "Кинобездна") {
+
+    Container(apiGateway, "API Gateway", "Nginx", "Единая точка входа для клиентов")
+
+    ContainerQueue(kafka, "Kafka", "Очередь для асинхронного взаимодействия микросервисов")
+    Container(userService, "User Service", "Go", "Управление пользователями и взаимодействие с системой рекомендаций", $tags = "microService")
+    Container(mediaService, "Media Service", "Go", "Управление видео и метаданными", $tags = "microService")
+    Container(paymentService, "Payment Service", "Go", "Платежи, интеграция с платёжными системами и скидки", $tags = "microService")
+    Container(subscriptionService, "Subscription Service", "Go", "Управление подписками", $tags = "microService")
+
+    ContainerDb(userDb, "User DB", "PostgreSQL", "БД пользователей")
+    ContainerDb(mediametaDb, "Media Metadata DB", "PostgreSQL", "БД метаданных фильмов")
+    ContainerDb(mediaDb, "Video DB", "S3", "БД видео")
+    ContainerDb(paymentDb, "Payment DB", "PostgreSQL", "БД платежей и скидок")
+    ContainerDb(subscriptionDb, "Subscription DB", "PostgreSQL", "БД подписок")
+
+    Container(serviceMesh, "Service Mesh", "Istio", "")
+
+    ' Базы данных
+    Rel(userService, userDb, "Reads/Writes", "", $tags = "storage")
+    Rel(mediaService, mediaDb, "Reads/Writes", "", $tags = "storage")
+    Rel(mediaService, mediametaDb, "Reads/Writes", "", $tags = "storage")
+    Rel(paymentService, paymentDb, "Reads/Writes", "", $tags = "storage")
+    Rel(subscriptionService, subscriptionDb, "Reads/Writes", "", $tags = "storage")
+
+    ' Взаимодействия через mesh
+    Rel(apiGateway, serviceMesh, "Routes requests to")
+    Rel(serviceMesh, userService, "Routes traffic")
+    Rel_R(serviceMesh, kafka, )
+    Rel(serviceMesh, mediaService, "Routes traffic")
+    Rel(serviceMesh, paymentService, "Routes traffic")
+    Rel(serviceMesh, subscriptionService, "Routes traffic")
+
+}
+Rel_L(userService, rabbit,)
+
+
+
+Person(webClient, "Web Client", "Пользователь через браузер")
+Person(mobileClient, "Mobile App", "Пользователь через мобильное приложение")
+Person(tvClient, "Smart TV", "Пользователь через ТВ-приложение")
+
+Rel(webClient, apiGateway, "Uses")
+Rel(mobileClient, apiGateway, "Uses")
+Rel(tvClient, apiGateway, "Uses")
+
+@enduml
